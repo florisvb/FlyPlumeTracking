@@ -130,19 +130,27 @@ class Fly(object):
             self.time_at_last_encounter = self.time
             if self.surge_initiated is False:
                 self.surge_initiated = True
+                #self.casting_initiated = False
                 self.time_entered_plume = self.time
+                print 'surge initiated: ', self.time
+            print self.time-self.time_entered_plume
         if odor is False: # initiate casting, with delay
-            if (self.time - self.time_at_last_encounter) < 10*1000 and not self.casting_initiated:
+            #if (self.time - self.time_at_last_encounter) < 10*1000 and not self.casting_initiated:
+            if self.casting_initiated is False:
                 self.casting_initiated = True
+                #self.surge_initiated = False
                 self.climb_reversed = False
+                #print 'cast initiated: ', self.time
                 self.time_exited_plume = self.time
         self.odor = odor
+        
+            
         
         # surge
         if self.surge_initiated and self.behavior != 'surge':
             if self.time - self.time_entered_plume > self.surge_delay:
-                self.casting_initiated = False
-                self.altitude_initiated = False
+                #self.casting_initiated = False
+                #self.altitude_initiated = False
                 self.surge_initiated = False
                 self.behavior = 'surge'
                 
@@ -152,7 +160,7 @@ class Fly(object):
                 self.time_climb_reversed = self.time - self.altitude_time_amplitude/2. 
                 self.time_cast_initiated = self.time - self.cast_time_amplitude/2.
                 self.casting_initiated = False
-                self.surge_initiated = False
+                #self.surge_initiated = False
                 self.behavior = 'cast'
 
         # control casting reversals for horizontal and vertical directions
@@ -279,7 +287,7 @@ class World(object):
             value = self.fly.update(fly_odor, self.wind, self.dt, self.visual_features)
 
         # save data for plotting
-        if save_data:
+        if self.save_data:
             odor_packets = []
             for odor_packet in self.odor_packets:
                 pos = odor_packet.position
@@ -292,12 +300,14 @@ class World(object):
                 self.data['fly'].append(self.fly.position)
             else:
                 self.data['fly'].append([])
-        if value is not None:
-            if save_data:
-                f = open('sim_data.pickle', 'w')
-                pickle.dump(self.data, f)
-                f.close()  
-            return value
+                
+        if self.fly is not None:
+            if value is not None or self.fly.time > max_time:
+                if self.save_data:
+                    f = open('sim_data.pickle', 'w')
+                    pickle.dump(self.data, f)
+                    f.close()  
+                    return max_time
 
         # check end condition
         if self.fly is not None:
@@ -359,7 +369,7 @@ class World(object):
         
 if __name__ == '__main__':
     
-    save_data = False
+    save_data = True
 
     # save data to make animations
     if save_data:
@@ -367,12 +377,12 @@ if __name__ == '__main__':
         time = None
         while time is None:
             fly_parameters = {'surge_delay': 270,
-                              'cast_delay': 640,
+                              'cast_delay': 270,
                               'cast_time_amplitude': 500,
                               'altitude_time_amplitude': 309.0169,
                               'visual_attraction_probability': 1,
                               }
-            time = world.run(0, max_time=20000, fly_parameters=fly_parameters)
+            time = world.run(0, max_time=30000, fly_parameters=fly_parameters)
         
         
     # run simulation for three different algorithms

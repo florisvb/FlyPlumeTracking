@@ -21,7 +21,7 @@ def get_frame_name(frame, nframes):
 if __name__ == '__main__':
     # options
     figure_format = 'pdf' # alternative: png
-    axes=[1,2] # alternative: [0,1]
+    axes=[0,1] # alternative: [0,1]
     
     f = open('sim_data.pickle')
     data = pickle.load(f)

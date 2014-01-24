@@ -1,4 +1,4 @@
-This simulation was written for the following paper describing the odor plume tracking behavior of fruit flies: van Breugel, F. & Dickinson, M. H. (2013) Plume tracking behavior of flying Drosophila emerges from a set of distinct sensory-motor reflexes.
+This simulation was written for the following paper describing the odor plume tracking behavior of fruit flies: van Breugel, F. & Dickinson, M. H. (2014) Plume tracking behavior of flying Drosophila emerges from a set of distinct sensory-motor reflexes. Current Biology: http://www.sciencedirect.com/science/article/pii/S0960982213015820
 
 
 The code depends on several other packages that are either freely available on the internet, or freely available within this git repository: https://github.com/florisvb
